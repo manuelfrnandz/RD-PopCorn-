@@ -1,0 +1,128 @@
+SECCION,Concepto,Detalle,Valor_DOP,Valor_USD,Notas
+=== SUPUESTOS BASE ===,,,,,
+Supuesto,Tipo de cambio DOP/USD,Mayo 2026 promedio,59,1,"Fuente: BCRD / Wise / Bloomberg, rango 58.7-59.5"
+Supuesto,Inflación anualizada RD,Noviembre 2025 interanual,4.81%,,"Fuente: BCRD vía Diario Libre 2025/11"
+Supuesto,Canasta básica nacional (referencia poder adquisitivo),Dic 2025 promedio,48541,823,"Fuente: BCRD - golpea ticket discrecional"
+Supuesto,Gasto turista por día RD,Promedio 2025,10086,170.94,"BCRD vía arecoa.com - relevante para Punta Cana / Zona Colonial"
+Supuesto,Ticket street food típico RD,Vendedor callejero,100,1.7,"jjstudiophoto / pulsoviajero"
+Supuesto,Ticket fast food (McMeal),Benchmark superior,390,6.6,"jjstudiophoto"
+Supuesto,Margen bruto objetivo popcorn,Industria,68%,,"Rango 60-72% según gmpopcorn / Webstaurantstore"
+Supuesto,Food cost objetivo (COGS/ventas),Industria snack,32%,,"Rango 28-35% según altametrics / theforkmanager"
+,,,,,
+=== PRECIOS DE VENTA SUGERIDOS (PVP) ===,,,,,
+Precio,Cubeta mantequilla pequeña (250g),Single-flavor entrada,200,3.4,"Por debajo de combo cine, sobre street food"
+Precio,Cubeta caramelo pequeña (250g),Premium single,250,4.24,"Caramelo cuesta más insumos"
+Precio,Cubeta MIXTA mediana (500g) **HERO**,Producto estrella - mantequilla + caramelo,350,5.93,"Diferenciador vs cine - misma cubeta dos sabores"
+Precio,Cubeta familiar XL (1kg mixta),Para compartir 2-4 personas,650,11.02,"Compite con Caribbean Cinemas Family Combo PR ($12)"
+Precio,Combo cubeta mediana + agua/refresco,Mediano + bebida,420,7.12,"Upsell, no obligatorio"
+Precio,Ticket promedio ponderado estimado,Mix de productos,350,5.93,"Asume 50% mediana, 25% pequeña, 20% XL, 5% combo"
+,,,,,
+=== CAPEX MVP (modelo mínimo viable) ===,,,,,
+CAPEX_MVP,Máquina popcorn comercial 8oz (usada),Facebook Marketplace RD / Mercado Libre,35000,593,"Rango RD$25-50K - usada confiable o nueva Vevor/Ventus"
+CAPEX_MVP,Carpa pop-up 3x3 + estructura,Branded básico,15000,254,"Generica + vinilo personalizado"
+CAPEX_MVP,Mesa plegable y display de cubetas,Acrílico + iluminación LED,8000,136,
+CAPEX_MVP,Utensilios (palas, tazas medidoras, balanza),Operación básica,5000,85,
+CAPEX_MVP,Termo de mantequilla saborizada,Mantener temperatura,3000,51,
+CAPEX_MVP,Cubetas y empaques (stock 500 unidades),Cartón + bolsa kraft + sticker,12000,203,"~RD$24/unidad costo unitario"
+CAPEX_MVP,Inventario inicial granos premium butterfly,15kg maíz mariposa,4500,76,"~RD$300/kg importado o local"
+CAPEX_MVP,Inventario inicial granos mushroom (caramelo),10kg maíz hongo,3500,59,"Tipo de grano distinto - clave técnica"
+CAPEX_MVP,Insumos: aceite coco/canola + Flavacol + saborizantes,30 días operación,8000,136,"Bulk - traer de USA o Alibaba"
+CAPEX_MVP,Saborizante caramelo / glaze pop,Glaze + azúcar invertido,6000,102,
+CAPEX_MVP,Permiso sanitario DIGEMAPS (gestión + tasas),Carné manipulador + trámite,15000,254,"Decreto 528-01 - 60-90 días"
+CAPEX_MVP,Registro mercantil + RNC (Cámara Comercio),Persona física o EIRL básica,8000,136,
+CAPEX_MVP,Uniformes (2 sets) y delantales,Branding mínimo,4000,68,
+CAPEX_MVP,Lanzamiento Instagram/TikTok orgánico,Producción contenido 1ª semana,10000,169,"Foto/video local + boost mínimo"
+CAPEX_MVP,Capital de trabajo (1 mes OPEX),Colchón operativo,50000,847,
+CAPEX_MVP,Contingencia (10%),Imprevistos,18000,305,
+CAPEX_MVP,**TOTAL CAPEX MVP**,,205000,3475,"Rango plausible RD$180-230K"
+,,,,,
+=== CAPEX SEMI-PROFESIONAL ===,,,,,
+CAPEX_SEMI,Máquina popcorn comercial 12oz nueva,Marca confiable (Cretors / Gold Medal / Vevor pro),85000,1441,"Mayor volumen por batch"
+CAPEX_SEMI,Caramelizer / coating mixer pequeño,Para producción gourmet,75000,1271,"Crítico para sabor caramelo consistente"
+CAPEX_SEMI,Stand/módulo modular branded,Diseño con vinilo profesional + cartelería,90000,1525,
+CAPEX_SEMI,Sistema POS + datafono (alquiler 12 meses),Aceptar tarjeta - clave en malls,18000,305,
+CAPEX_SEMI,Display refrigerado bebidas (opcional),Aumenta ticket,25000,424,
+CAPEX_SEMI,Inventario inicial premium (60 días),Granos + insumos + empaques,45000,763,
+CAPEX_SEMI,Permiso DIGEMAPS + registro de marca,Registro sanitario producto + ONAPI,40000,678,"ONAPI marca registrada ~RD$10K"
+CAPEX_SEMI,Uniformes y branding (4 sets),Profesional,12000,203,
+CAPEX_SEMI,Marketing lanzamiento intensivo,Pauta IG/TikTok + influencer micro,60000,1017,"Crítico para tracción inicial"
+CAPEX_SEMI,Diseño visual / logo / packaging,Estudio diseño local,35000,593,
+CAPEX_SEMI,Capital de trabajo (2 meses OPEX),Colchón operativo,180000,3051,
+CAPEX_SEMI,Contingencia (10%),Imprevistos,67000,1136,
+CAPEX_SEMI,**TOTAL CAPEX SEMI-PRO**,,732000,12407,"Rango plausible RD$600-850K"
+,,,,,
+=== OPEX MENSUAL - ESCENARIO BASE ===,,,,,
+OPEX,Alquiler espacio (rotación entre kiosko/eventos),"Mix mall + ferias, 18-22 días/mes",40000,678,"Mall kiosko Sambil/Ágora ~RD$50-100K solo, ferias variable"
+OPEX,Salarios (1 vendedor + dueño operativo),Vendedor RD$22K + 1 día extra fin de semana,28000,475,"Salario mínimo RD ~RD$15K-20K formal"
+OPEX,Marketing recurrente (pauta + contenido),IG/TikTok ads + producción,12000,203,
+OPEX,Transporte (combustible + setup),Mover stand + insumos,8000,136,
+OPEX,Servicios (electricidad evento + agua),Variable según ubicación,4000,68,
+OPEX,Insumos consumibles (no COGS): guantes, limpieza,Operación higiene,3500,59,
+OPEX,Renovación permisos + contador,Amortizado mensual,5000,85,
+OPEX,Reposición empaques (uso) y misc,Mantenimiento,4500,76,
+OPEX,**TOTAL OPEX MENSUAL BASE**,,105000,1780,
+,,,,,
+=== ESCENARIOS DE VENTAS MENSUALES ===,,,,,
+Escenario,Variable,Conservador,Base,Optimista,Notas
+Ventas,Unidades por día,15,30,50,"Conservador asume baja conversión inicial"
+Ventas,Días operativos por mes,18,22,26,"Base = 5 días/sem; Optimista = 6 días/sem + ferias"
+Ventas,Unidades totales/mes,270,660,1300,
+Ventas,Ticket promedio (DOP),320,350,400,"Optimista refleja mejor mix XL/combo"
+Ventas,**INGRESOS MES (DOP)**,86400,231000,520000,
+Ventas,Ingresos mes (USD),1464,3915,8814,
+,,,,,
+=== P&L MENSUAL - 3 ESCENARIOS ===,,,,,
+P&L,Concepto,Conservador,Base,Optimista,Notas
+P&L,Ingresos brutos,86400,231000,520000,
+P&L,COGS (32% food cost),-27648,-73920,-166400,"Granos + aceite + saborizante + empaque"
+P&L,**Margen bruto**,58752,157080,353600,
+P&L,Margen bruto %,68%,68%,68%,
+P&L,OPEX,-105000,-105000,-125000,"Optimista incrementa por más días/labor extra"
+P&L,**EBITDA mensual**,-46248,52080,228600,
+P&L,EBITDA % sobre ventas,-54%,23%,44%,
+P&L,Comisión POS/tarjeta (2.5% sobre 60% pagos),-1296,-3465,-7800,
+P&L,Impuestos estimados (ISC + ITBIS net 5% efectivo),-4320,-11550,-26000,"Régimen simplificado RST sub RD$11.7M",
+P&L,**Utilidad neta mensual**,-51864,37065,194800,
+,,,,,
+=== BREAK-EVEN ===,,,,,
+BE,Métrica,MVP,Semi-Pro,Notas,
+BE,CAPEX inicial,205000,732000,DOP,
+BE,Utilidad neta mensual (escenario BASE),37065,37065,DOP,"Mismo OPEX/ventas en base; semi-pro espera mejor ticket"
+BE,Meses para recuperar (escenario base),5.5,19.7,Meses sin reinversión,
+BE,Meses para recuperar (escenario optimista),1.1,3.8,Meses,"Si todo sale bien"
+BE,Meses para recuperar (escenario conservador),Negativo (no recupera),Negativo,Meses,"⚠️ ALERTA - modelo no es viable en conservador"
+,,,,,
+=== UNIDADES NECESARIAS PARA RECUPERAR ===,,,,,
+Recup,Plazo,Unidades necesarias MVP,Unidades necesarias Semi-Pro,Notas,
+Recup,3 meses,~575 u/mes,~2050 u/mes,"~26 u/día vs ~93 u/día - el segundo poco realista MVP-1"
+Recup,6 meses,~290 u/mes,~1025 u/mes,"~13 u/día vs ~47 u/día - 6 meses mucho más realista"
+Recup,12 meses,~145 u/mes,~510 u/mes,"~7 u/día vs ~23 u/día - margen amplio en MVP"
+,,,,,
+=== SENSIBILIDAD - Utilidad neta mensual escenario BASE ===,,,,,
+Sens,Variable,-20%,Base,+20%,Notas
+Sens,Unidades vendidas (660),18012,37065,56118,"Mayor palanca operativa"
+Sens,Ticket promedio (RD$350),18012,37065,56118,"Equivalente a unidades"
+Sens,Food cost % (32%),46245,37065,27885,"Subida de insumos golpea fuerte"
+Sens,Alquiler espacio (RD$40K),45065,37065,29065,"Renegociar canal clave"
+,,,,,
+=== PROYECCIÓN 12 MESES (MVP - escenario base con curva de adopción) ===,,,,,
+Mes,Unidades,Ingresos_DOP,Costo_COGS,OPEX,Utilidad_neta,Acumulado_vs_CAPEX
+1,330,115500,-36960,-105000,-26460,-231460
+2,420,147000,-47040,-105000,-5040,-236500
+3,520,182000,-58240,-105000,18760,-217740
+4,600,210000,-67200,-105000,37800,-179940
+5,660,231000,-73920,-105000,52080,-127860
+6,700,245000,-78400,-105000,61600,-66260
+7,720,252000,-80640,-105000,66360,100
+8,720,252000,-80640,-105000,66360,66460
+9,720,252000,-80640,-105000,66360,132820
+10,750,262500,-84000,-110000,68500,201320
+11,800,280000,-89600,-110000,80400,281720
+12,850,297500,-95200,-110000,92300,374020
+TOTAL,,2926500,-872480,-1265000,789020,
+,,,,,
+=== CONCLUSIONES DEL MODELO ===,,,,,
+Conclusion,Break-even MVP,Mes 7 en escenario base con curva adopción gradual,,,
+Conclusion,Margen contributivo bruto saludable,68% - alineado con benchmarks industria,,,
+Conclusion,Riesgo principal,Sub-escala: si <15 u/día sostenido pierde RD$50K/mes,,,
+Conclusion,Recomendación,Empezar MVP - validar 90 días antes de mover a semi-pro,,,

@@ -116,3 +116,53 @@
 - Volumen real de venta de popcorn en Caribbean Cinemas RD (sin reporte público)
 - Datos de Kopcalecas (privados; solo Instagram visible)
 - Costo exacto de DIGEMAPS para producto popcorn fresco (decreto 528-01 menciona rangos, no cifra única)
+
+---
+
+## Iteración 2 — Fuentes adicionales (PRESENTACION.md + ANEXOS.md)
+
+### Fiscalidad RD
+
+| Fuente | Dato extraído | Confianza |
+|---|---|---|
+| [DGII — ITBIS](https://dgii.gov.do/cicloContribuyente/obligacionesTributarias/principalesImpuestos/Paginas/Itbis.aspx) | ITBIS 18% tasa general; alimentos básicos exentos; reducido 16% para algunos | [V] |
+| [DGII — Guía ITBIS](https://dgii.gov.do/publicacionesOficiales/bibliotecaVirtual/contribuyentes/itbis/Documents/1-Guia%207%20-%20(ITBIS).pdf) | Guía oficial completa | [V] |
+| [PH Law — ITBIS exenciones](https://phlaw.com/post/value-added-tax-itbis-in-the-dominican-republic-exemptions-and-reduced-rates/) | Snacks procesados → 18%; productos no de primera necesidad pueden ir a 16% | [V] |
+| [Alegra — Productos exentos ITBIS](https://blog.alegra.com/republica-dominicana/productos-exentos-de-itbis/) | Lista productos exentos, snacks no incluidos | [V] |
+| [Diario Libre — Historia ITBIS](https://www.diariolibre.com/economia/finanzas/2023/07/31/evolucion-del-itbis-en-republica-dominicana-del-6-al-18-/2419060) | Evolución 6→18% — contexto | [V] |
+| [DGII — RST oficial](https://dgii.gov.do/contribuyentesRegistrados/regimenesEspeciales/RST/Paginas/default.aspx) | Régimen Simplificado de Tributación | [V] |
+| [DGII — Guía RST PDF](https://dgii.gov.do/publicacionesOficiales/bibliotecaVirtual/contribuyentes/rst/Documents/Guia%20de%20Regimen%20Simplificado%20de%20Tributacion%20(RST).pdf) | Guía oficial Contribuyente No.16 | [V] |
+| [Alegra — RST RD](https://blog.alegra.com/republica-dominicana/regimen-simplificado-de-tributacion-republica-dominicana/) | Límite ingresos RD$10,742,792.74/año; compras RD$49,392,150.51 | [V] |
+| [El Dinero — RST aliado emprendedores](https://eldinero.com.do/280515/es-el-rst-un-aliado-de-los-emprendedores-en-republica-dominicana/) | Beneficios para PYME | [V] |
+
+### Apagones / energía RD
+
+| Fuente | Dato extraído | Confianza |
+|---|---|---|
+| [Diario Libre — Apagones agosto 2025](https://www.diariolibre.com/economia/energia/2025/08/13/largos-apagones-afectan-a-varios-sectores-del-gran-santo-domingo/3212930) | Apagones largos en Gran Santo Domingo | [V] |
+| [CDN — Apagón Nov 2025](https://cdn.com.do/nacionales/apagon-2025-en-rd/) | Blackout nacional 14h | [V] |
+| [LuzRD — Mapa apagones tiempo real](https://www.luzrd.do/) | Herramienta de monitoreo | [V] |
+| [Ensegundos — EDEESTE 2025](https://ensegundos.do/2025/01/10/clientes-de-edeeste-seran-los-mas-afectados-por-apagones/) | EDEESTE clientes más afectados | [V] |
+| [Diario Libre — CUED apagones](https://www.diariolibre.com/economia/energia/2025/01/10/apagones-que-anuncio-el-cued-afectaran-mas-a-clientes-de-edeeste/2963082) | Programa apagones distribuidoras | [V] |
+| [7Dias — Crisis Santo Domingo 2025](https://7dias.com.do/2025/12/30/el-dia-en-que-republica-dominicana-se-apago-por-completo-en-el-2025-por-un-blackout-los-apagones-reaparecieron-como-jossie-esteban-con-fuerza/) | Crisis eléctrica todo 2025 — EDESUR 17h, EDENORTE 14.72h promedio Nov | [V] |
+
+### Empaque biodegradable RD
+
+| Fuente | Dato extraído | Confianza |
+|---|---|---|
+| [We Supply Dominicana](https://www.wesupply.do/) | Proveedor RD de empaques biodegradables para F&B | [V] |
+| [ProEmpaques Nacionales](https://www.proempaques.com.do/) | Proveedor RD biodegradables y reciclables | [V] |
+
+### Capacidad de máquinas popcorn (referencias técnicas)
+
+| Fuente | Dato extraído | Confianza |
+|---|---|---|
+| [Popcorn Supply — Equipment](https://popcornsupply.com/caramel-flavored-corn-equipment) | Caramelizers, coating mixers — referencia técnica | [V] [Px USA] |
+| [Webstaurantstore — Caramelizers](https://www.webstaurantstore.com/64063/popcorn-caramelizers.html) | Tipos y rangos de precio | [V] [Px USA] |
+| [HT Market — 6-16oz machines](https://www.htmarket.com/popcorn-machines-and-popcorn-supplies-popcorn-machines-and-popcorn-poppers-6oz---8oz---12oz-----16oz.html) | Especificaciones 8oz: ~48 tazas/batch, 3-4 min | [V] [Px USA] |
+
+### Nuevos gaps reconocidos (iteración 2)
+- Costo exacto de planta eléctrica portátil 2000W en RD (rango DOP 35-55K es estimación)
+- Comisión real PedidosYa / Uber Eats RD (variable por negociación)
+- Volumen real de bodas/eventos privados RD por año (sin asociación que reporte)
+- Tarifa real Bocao Food Fest 2025/2026 expositor snack (contacto directo requerido)

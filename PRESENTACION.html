@@ -72,9 +72,49 @@ tr:nth-child(even) td { background: rgba(244, 196, 48, 0.07); }
 .swot-cell ul { margin-left: 1.2em; }
 .swot-cell li { font-size: 0.95em; margin-bottom: 0.2em; }
 
-.counter { position: fixed; bottom: 1.2em; right: 1.5em; color: #A0522D; font-weight: 700; font-size: 0.95em; background: rgba(255,255,255,0.85); padding: 0.3em 0.8em; border-radius: 1em; z-index: 100; }
-.nav-hint { position: fixed; bottom: 1.2em; left: 1.5em; color: #8B7355; font-size: 0.78em; background: rgba(255,255,255,0.6); padding: 0.3em 0.7em; border-radius: 1em; z-index: 100; }
+.counter { position: fixed; bottom: 1.2em; right: 1.5em; color: #A0522D; font-weight: 700; font-size: 0.95em; background: rgba(255,255,255,0.9); padding: 0.3em 0.8em; border-radius: 1em; z-index: 100; box-shadow: 0 2px 6px rgba(0,0,0,0.1); }
+.nav-hint { position: fixed; bottom: 1.2em; left: 1.5em; color: #8B7355; font-size: 0.75em; background: rgba(255,255,255,0.6); padding: 0.3em 0.7em; border-radius: 1em; z-index: 100; }
 .progress { position: fixed; top: 0; left: 0; height: 4px; background: #A0522D; transition: width 0.3s; z-index: 100; }
+
+/* Botones de navegación visibles */
+.nav-btn {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  width: 56px; height: 56px; border-radius: 50%;
+  background: #A0522D; color: white; border: none;
+  font-size: 1.8em; font-weight: bold; cursor: pointer;
+  z-index: 150; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform 0.15s, background 0.2s;
+  user-select: none;
+}
+.nav-btn:hover { background: #8B4513; transform: translateY(-50%) scale(1.08); }
+.nav-btn:active { transform: translateY(-50%) scale(0.95); }
+.nav-btn:disabled { background: #C0A080; cursor: not-allowed; opacity: 0.4; }
+.nav-btn.prev { left: 1.2em; }
+.nav-btn.next { right: 1.2em; }
+
+/* Barra inferior de controles */
+.controls {
+  position: fixed; bottom: 1em; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 0.5em; align-items: center;
+  background: white; padding: 0.4em 0.8em; border-radius: 2em;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 100;
+}
+.controls button {
+  background: #F4C430; color: #3A2818; border: none;
+  padding: 0.45em 1em; border-radius: 1.5em; cursor: pointer;
+  font-weight: 600; font-size: 0.88em; transition: all 0.15s;
+}
+.controls button:hover { background: #A0522D; color: white; }
+.controls button:disabled { background: #E8E0D0; color: #999; cursor: not-allowed; }
+
+/* Zonas invisibles de click izquierdo/derecho para navegar */
+.click-zone {
+  position: fixed; top: 0; bottom: 0; width: 18vw;
+  z-index: 50; cursor: pointer; background: transparent;
+}
+.click-zone.left { left: 0; }
+.click-zone.right { right: 0; }
 
 .overview {
   position: fixed; inset: 0; background: rgba(58, 40, 24, 0.95);
@@ -679,9 +719,26 @@ Margen bruto         DOP 184.61  (≈68% sobre neto)</pre>
   <div class="big-decision bd-nogo">Si tienes ≥2 NO → <strong>NO-GO por ahora</strong>, archivar idea con honestidad</div>
 </section>
 
+<!-- Zonas invisibles clickeables (lados izquierdo/derecho de pantalla) -->
+<div class="click-zone left" onclick="show(current - 1)" title="Slide anterior"></div>
+<div class="click-zone right" onclick="show(current + 1)" title="Siguiente slide"></div>
+
+<!-- Botones de navegación grandes -->
+<button class="nav-btn prev" id="btnPrev" onclick="show(current - 1)" aria-label="Anterior">‹</button>
+<button class="nav-btn next" id="btnNext" onclick="show(current + 1)" aria-label="Siguiente">›</button>
+
+<!-- Controles inferiores -->
+<div class="controls">
+  <button onclick="show(0)" title="Inicio">⏮</button>
+  <button onclick="show(current - 1)" id="ctrlPrev">‹ Anterior</button>
+  <button onclick="toggleOverview()" title="Vista general">⊞ Vista</button>
+  <button onclick="show(current + 1)" id="ctrlNext">Siguiente ›</button>
+  <button onclick="show(slides.length - 1)" title="Final">⏭</button>
+</div>
+
 <!-- NAVEGACIÓN -->
 <div class="counter" id="counter">1 / 18</div>
-<div class="nav-hint">← → flechas · ESC vista general · F pantalla completa · P imprimir/PDF</div>
+<div class="nav-hint">Clic en los lados o usa los botones · ESC vista general · F pantalla completa</div>
 
 <!-- VISTA GENERAL (overview) -->
 <div class="overview" id="overview">
@@ -722,7 +779,14 @@ function show(i) {
   slides[current].scrollTop = 0;
   document.getElementById('counter').textContent = `${current + 1} / ${total}`;
   document.getElementById('progress').style.width = `${((current + 1) / total) * 100}%`;
-  history.replaceState(null, '', `#${current + 1}`);
+  // Habilitar/deshabilitar botones en los extremos
+  const atStart = current === 0;
+  const atEnd = current === total - 1;
+  document.getElementById('btnPrev').disabled = atStart;
+  document.getElementById('btnNext').disabled = atEnd;
+  document.getElementById('ctrlPrev').disabled = atStart;
+  document.getElementById('ctrlNext').disabled = atEnd;
+  try { history.replaceState(null, '', `#${current + 1}`); } catch (e) {}
 }
 
 function toggleOverview() {
@@ -763,12 +827,8 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// Click derecho/izquierdo en pantalla para navegar
-document.addEventListener('click', e => {
-  if (e.target.closest('.overview') || e.target.closest('.overview-card')) return;
-  if (document.getElementById('overview').classList.contains('active')) return;
-  // No navega con clic — solo teclado, para no interferir con selección de texto
-});
+// Asegurar que el foco esté en el documento para que el teclado funcione
+window.addEventListener('load', () => { window.focus(); });
 
 // Touch swipe para móvil
 let touchX = null;

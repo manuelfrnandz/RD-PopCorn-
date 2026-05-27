@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Doble — Pop-up popcorn RD</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { width: 100%; height: 100%; overflow: hidden; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Inter", "DM Sans", Roboto, sans-serif;
+  background: #F5F0E1;
+  color: #3A2818;
+  -webkit-font-smoothing: antialiased;
+}
+.slide {
+  position: fixed;
+  inset: 0;
+  padding: 5vh 6vw;
+  display: none;
+  flex-direction: column;
+  overflow-y: auto;
+  animation: fadeIn 0.3s ease-out;
+}
+.slide.active { display: flex; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+h1 { color: #A0522D; font-size: clamp(2em, 4vw, 3em); margin-bottom: 0.3em; line-height: 1.1; }
+h2 {
+  color: #A0522D; font-size: clamp(1.6em, 3vw, 2.2em);
+  margin-bottom: 0.6em; border-bottom: 4px solid #F4C430;
+  padding-bottom: 0.25em; line-height: 1.15;
+}
+h3 { color: #8B4513; font-size: clamp(1.1em, 1.6vw, 1.35em); margin: 0.9em 0 0.35em; }
+p, li { font-size: clamp(0.95em, 1.2vw, 1.1em); line-height: 1.55; margin-bottom: 0.45em; }
+ul, ol { margin-left: 1.6em; }
+strong { color: #8B4513; }
+em { font-style: italic; color: #6A4515; }
+code { background: #F0E8D8; padding: 0.1em 0.35em; border-radius: 0.25em; font-family: "SF Mono", Monaco, monospace; font-size: 0.92em; color: #5A3015; }
+pre { background: #2D1810; color: #F5F0E1; padding: 1em 1.2em; border-radius: 0.6em; overflow-x: auto; font-size: 0.85em; line-height: 1.45; margin: 0.8em 0; }
+pre code { background: transparent; color: inherit; padding: 0; }
+blockquote { border-left: 5px solid #F4C430; padding: 0.4em 1em; margin: 0.8em 0; font-style: italic; color: #6A4515; background: rgba(244, 196, 48, 0.08); border-radius: 0 0.4em 0.4em 0; }
+
+table { border-collapse: collapse; width: 100%; margin: 0.8em 0; font-size: clamp(0.85em, 1.05vw, 1em); }
+th { background: #F4C430; color: #3A2818; padding: 0.55em 0.75em; text-align: left; font-weight: 700; border: 1px solid #E0B530; }
+td { padding: 0.45em 0.75em; border: 1px solid #E0D5C5; background: white; }
+tr:nth-child(even) td { background: rgba(244, 196, 48, 0.07); }
+
+.cover { justify-content: center; align-items: center; text-align: center; background: linear-gradient(135deg, #F5F0E1 0%, #F4C430 100%); }
+.cover h1 { font-size: clamp(3em, 7vw, 5.5em); margin-bottom: 0.2em; }
+.cover .subtitle { font-size: clamp(1.1em, 2vw, 1.5em); color: #6A4515; margin-bottom: 1.5em; }
+.cover .verdict-box { background: #3A2818; color: #F5F0E1; padding: 1.2em 2em; border-radius: 0.8em; font-size: clamp(1em, 1.6vw, 1.3em); font-weight: 600; max-width: 800px; margin: 1em auto; }
+.cover .meta { color: #8B4513; font-size: 0.9em; margin-top: 2em; }
+
+.verdict { background: #F4C430; color: #3A2818; padding: 0.9em 1.2em; border-radius: 0.5em; font-weight: 600; font-size: 1.1em; margin: 0.8em 0; border-left: 5px solid #A0522D; }
+.callout { background: rgba(160, 82, 45, 0.08); padding: 0.9em 1.2em; border-radius: 0.5em; border-left: 4px solid #A0522D; margin: 0.7em 0; }
+.callout-warn { background: rgba(220, 50, 50, 0.08); padding: 0.9em 1.2em; border-radius: 0.5em; border-left: 4px solid #C8302E; margin: 0.7em 0; }
+.callout-warn strong { color: #C8302E; }
+.callout-ok { background: rgba(50, 150, 60, 0.08); padding: 0.9em 1.2em; border-radius: 0.5em; border-left: 4px solid #3A9D3A; margin: 0.7em 0; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2em; margin: 0.6em 0; }
+.grid-2 > div { background: white; padding: 1em 1.2em; border-radius: 0.5em; border: 1px solid #E0D5C5; }
+.grid-2 h3 { margin-top: 0; }
+
+.swot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8em; margin: 0.6em 0; }
+.swot-cell { padding: 0.9em 1.1em; border-radius: 0.5em; }
+.swot-s { background: rgba(50, 150, 60, 0.12); border: 2px solid #3A9D3A; }
+.swot-w { background: rgba(220, 150, 50, 0.12); border: 2px solid #D08F30; }
+.swot-o { background: rgba(60, 120, 200, 0.12); border: 2px solid #3C78C8; }
+.swot-t { background: rgba(200, 60, 60, 0.12); border: 2px solid #C8302E; }
+.swot-cell h3 { margin-top: 0; }
+.swot-cell ul { margin-left: 1.2em; }
+.swot-cell li { font-size: 0.95em; margin-bottom: 0.2em; }
+
+.counter { position: fixed; bottom: 1.2em; right: 1.5em; color: #A0522D; font-weight: 700; font-size: 0.95em; background: rgba(255,255,255,0.85); padding: 0.3em 0.8em; border-radius: 1em; z-index: 100; }
+.nav-hint { position: fixed; bottom: 1.2em; left: 1.5em; color: #8B7355; font-size: 0.78em; background: rgba(255,255,255,0.6); padding: 0.3em 0.7em; border-radius: 1em; z-index: 100; }
+.progress { position: fixed; top: 0; left: 0; height: 4px; background: #A0522D; transition: width 0.3s; z-index: 100; }
+
+.overview {
+  position: fixed; inset: 0; background: rgba(58, 40, 24, 0.95);
+  display: none; padding: 4vh 4vw; overflow-y: auto; z-index: 200;
+}
+.overview.active { display: block; }
+.overview-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1em; }
+.overview-card { background: #F5F0E1; padding: 1em; border-radius: 0.5em; cursor: pointer; transition: transform 0.15s; min-height: 120px; }
+.overview-card:hover { transform: scale(1.04); box-shadow: 0 4px 12px rgba(244,196,48,0.4); }
+.overview-card .num { color: #A0522D; font-weight: 700; font-size: 0.85em; }
+.overview-card .title { color: #3A2818; font-weight: 600; margin-top: 0.3em; font-size: 0.95em; }
+
+.q-list { background: white; padding: 1.2em 1.5em; border-radius: 0.6em; margin: 0.5em 0; border: 1px solid #E0D5C5; }
+.q-list ol { margin-left: 1.4em; }
+.q-list li { margin-bottom: 0.7em; }
+.q-list li strong { display: block; color: #A0522D; }
+.q-list li em { display: block; color: #8B7355; font-size: 0.95em; margin-top: 0.2em; }
+
+.big-decision { font-size: clamp(1.2em, 1.8vw, 1.5em); text-align: center; padding: 1em; margin: 1em 0; border-radius: 0.6em; font-weight: 600; }
+.bd-go { background: #3A9D3A; color: white; }
+.bd-nogo { background: #C8302E; color: white; }
+.bd-review { background: #D08F30; color: white; }
+
+.persona-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1em; margin: 0.5em 0; }
+.persona { background: white; padding: 1em 1.1em; border-radius: 0.5em; border: 1px solid #E0D5C5; }
+.persona h3 { color: #A0522D; margin-top: 0; font-size: 1.1em; }
+.persona p { font-size: 0.92em; margin-bottom: 0.3em; }
+
+.compact { font-size: 0.88em; }
+.compact td, .compact th { padding: 0.35em 0.55em; }
+
+.checklist { background: white; padding: 1em 1.4em; border-radius: 0.5em; border: 1px solid #E0D5C5; margin: 0.5em 0; }
+.checklist h3 { margin-top: 0; color: #A0522D; }
+.checklist ul { list-style: none; margin-left: 0; }
+.checklist li { padding: 0.3em 0; padding-left: 1.6em; position: relative; }
+.checklist li:before { content: "☐"; position: absolute; left: 0; color: #A0522D; font-size: 1.2em; }
+
+@media (max-width: 800px) {
+  .slide { padding: 3vh 4vw; }
+  .grid-2, .swot-grid, .persona-row { grid-template-columns: 1fr; }
+  table { font-size: 0.78em; }
+}
+
+.print-only { display: none; }
+@media print {
+  html, body { overflow: visible; height: auto; }
+  .slide { display: block !important; position: relative; inset: auto; page-break-after: always; min-height: 100vh; padding: 4vh 5vw; animation: none; }
+  .counter, .nav-hint, .progress, .overview { display: none !important; }
+}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress" style="width:5.5%"></div>
+
+<!-- SLIDE 1 — PORTADA -->
+<section class="slide cover active">
+  <h1>🍿 Doble</h1>
+  <p class="subtitle">Pop-up popcorn de sabores mixtos en República Dominicana</p>
+  <div class="verdict-box">
+    <strong>Veredicto:</strong> SÍ — pero como MVP de USD 3,500.<br>
+    Semi-pro solo después de probar la demanda.
+  </div>
+  <p class="meta">Análisis para decisión personal GO / NO-GO · Mayo 2026</p>
+</section>
+
+<!-- SLIDE 2 — DECISIÓN EN 30 SEGUNDOS -->
+<section class="slide">
+  <h2>Decisión en 30 segundos</h2>
+  <h3>¿Qué hago ahora?</h3>
+  <table>
+    <thead><tr><th>Si tienes...</th><th>Y...</th><th>Entonces</th></tr></thead>
+    <tbody>
+      <tr><td>USD 3,500 disponibles</td><td>Puedes operar tú mismo 90 días</td><td><strong style="color:#3A9D3A">✅ GO MVP</strong></td></tr>
+      <tr><td>USD 3,500 disponibles</td><td>No puedes dedicarle 4 días/semana</td><td><strong style="color:#C8302E">❌ NO-GO o socio</strong></td></tr>
+      <tr><td>USD 12,000 disponibles</td><td>Sin haber probado el producto</td><td><strong style="color:#C8302E">❌ NO-GO — primero MVP</strong></td></tr>
+      <tr><td>&lt;USD 2,000</td><td>—</td><td><strong style="color:#C8302E">❌ NO-GO</strong></td></tr>
+    </tbody>
+  </table>
+  <div class="callout">
+    <strong>El error caro:</strong> invertir USD 12K en el modelo semi-pro sin validar la demanda primero.<br>
+    <strong>El error barato:</strong> probar 90 días con USD 3,500 y aprender.
+  </div>
+</section>
+
+<!-- SLIDE 3 — LA OPORTUNIDAD -->
+<section class="slide">
+  <h2>La oportunidad</h2>
+  <h3>Por qué este negocio existe en RD ahora</h3>
+  <ul>
+    <li><strong>Mercado de snacks RD = DOP 13.13 mil millones</strong> en 2024, creciendo <strong>+8% anual</strong> hasta 2029</li>
+    <li><strong>Ningún operador físico vende popcorn gourmet fresco</strong> en RD:
+      <ul>
+        <li><strong>Kopcalecas</strong> existe solo en Instagram, sin punto físico</li>
+        <li><strong>Caribbean Cinemas / Palacio del Cine</strong> solo venden mantequilla — sin sabores</li>
+        <li>Lo importado (Act II, PopCorners) es <em>popcorn empacado</em>, no fresco</li>
+      </ul>
+    </li>
+    <li><strong>51.8% de penetración e-commerce</strong> en RD (Kantar 2024) — canal delivery viable</li>
+    <li><strong>Turismo récord 2025:</strong> USD 170.94/día por turista; 94.7% lo considera asequible</li>
+    <li><strong>Bocao Food Fest no cobra comisión</strong> a restaurantes participantes — canal casi gratis</li>
+  </ul>
+  <blockquote>
+    "En todo Santo Domingo no hay un solo lugar físico donde comprar una cubeta de popcorn fresco con dos sabores. Eso es un hueco, no un mercado saturado."
+  </blockquote>
+</section>
+
+<!-- SLIDE 4 — SOLUCIÓN + MARCA -->
+<section class="slide">
+  <h2>La solución + marca propuesta</h2>
+  <div class="grid-2">
+    <div>
+      <h3>Arquitectura de producto</h3>
+      <table class="compact">
+        <tr><td><strong>Mixta mediana</strong> ⭐</td><td>500g</td><td><strong>DOP 350</strong></td></tr>
+        <tr><td>XL mixta familiar</td><td>1 kg</td><td>DOP 650</td></tr>
+        <tr><td>Mantequilla pequeña</td><td>250g</td><td>DOP 200</td></tr>
+        <tr><td>Caramelo pequeño</td><td>250g</td><td>DOP 250</td></tr>
+        <tr><td>Combo mediana + bebida</td><td>500g+12oz</td><td>DOP 420</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Marca: "Doble"</h3>
+      <p><strong>Nombre:</strong> Doble (corto, registrable ONAPI)</p>
+      <p><strong>Tagline:</strong> <em>"Dos sabores. Una cubeta. Cero compromiso."</em></p>
+      <p><strong>Paleta:</strong>
+        <span style="background:#F4C430;padding:0.2em 0.6em;border-radius:0.3em;">mantequilla</span>
+        <span style="background:#A0522D;color:white;padding:0.2em 0.6em;border-radius:0.3em;">caramelo</span>
+        <span style="background:#F5F0E1;border:1px solid #ccc;padding:0.2em 0.6em;border-radius:0.3em;">crema</span>
+      </p>
+      <p><strong>Tono:</strong> cercano, juvenil ("tú" no "usted"), honesto sobre origen panameño</p>
+    </div>
+  </div>
+  <blockquote>
+    "En Panamá lo descubrimos: una sola cubeta, dos sabores, sin tener que elegir.<br>
+    En RD nadie lo hace. Lo trajimos."
+  </blockquote>
+</section>
+
+<!-- SLIDE 5 — MERCADO Y CONSUMIDOR -->
+<section class="slide">
+  <h2>Mercado y buyer personas</h2>
+  <h3>Macro</h3>
+  <ul>
+    <li><strong>Tamaño:</strong> DOP 13.13B (2024) · <strong>CAGR +8%</strong> a 2029</li>
+    <li><strong>Inflación general RD:</strong> 4.81% interanual (Nov 2025)</li>
+    <li><strong>Canasta básica:</strong> DOP 48,541 (Dic 2025) → presiona gasto discrecional</li>
+    <li><strong>Ticket benchmarks:</strong> street food DOP 100 · McMeal DOP 390 · <strong>nuestro hero DOP 350</strong> ✨ zona dulce</li>
+  </ul>
+  <h3>3 personas concretas</h3>
+  <div class="persona-row">
+    <div class="persona">
+      <h3>María, 28</h3>
+      <p>Profesional Piantini, soltera</p>
+      <p><strong>Ocasión:</strong> sábado post-cine, viernes con amigas</p>
+      <p><strong>WTP:</strong> DOP 300-500</p>
+      <p><strong>Frecuencia:</strong> 1-2/mes</p>
+    </div>
+    <div class="persona">
+      <h3>Carlos, 38</h3>
+      <p>Wedding planner, 30-60 bodas/año</p>
+      <p><strong>Ocasión:</strong> estación snacks evento</p>
+      <p><strong>WTP:</strong> DOP 250-400 (bulk)</p>
+      <p><strong>Frecuencia:</strong> 2-5/mes</p>
+    </div>
+    <div class="persona">
+      <h3>Lisa, 45</h3>
+      <p>Turista canadiense Punta Cana</p>
+      <p><strong>Ocasión:</strong> tour Zona Colonial</p>
+      <p><strong>WTP:</strong> USD 6-12</p>
+      <p><strong>Frecuencia:</strong> 1×/estancia</p>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>Implicación:</strong> María mueve volumen + recurrencia. Carlos da margen alto en bursts. Lisa es upside futuro.
+  </div>
+</section>
+
+<!-- SLIDE 6 — COMPETENCIA + PORTER -->
+<section class="slide">
+  <h2>Competencia + 5 fuerzas de Porter</h2>
+  <div class="grid-2">
+    <div>
+      <h3>Mapa de competidores</h3>
+      <table class="compact">
+        <tr><th>Competidor</th><th>Tipo</th><th>Riesgo</th></tr>
+        <tr><td>Caribbean Cinemas / Palacio</td><td>Directo</td><td>🟢 Bajo</td></tr>
+        <tr><td><strong>Kopcalecas</strong> (IG only)</td><td>Directo</td><td>🟡 Medio</td></tr>
+        <tr><td>ChurroMania Sambil</td><td>Indirecto</td><td>🟡 Medio-alto</td></tr>
+        <tr><td>Bon, Polar, Cremos</td><td>Indirecto</td><td>🟡 Medio</td></tr>
+        <tr><td>Vendedores ambulantes</td><td>Indirecto</td><td>🟢 Bajo</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>5 fuerzas de Porter</h3>
+      <table class="compact">
+        <tr><th>Fuerza</th><th>Nivel</th></tr>
+        <tr><td>Rivalidad existente</td><td>🟢 Bajo</td></tr>
+        <tr><td><strong>Nuevos entrantes</strong></td><td>🔴 <strong>Alto</strong></td></tr>
+        <tr><td>Sustitutos</td><td>🟡 Medio-alto</td></tr>
+        <tr><td><strong>Poder proveedores</strong></td><td>🔴 <strong>Alto</strong> (USD)</td></tr>
+        <tr><td>Poder compradores</td><td>🟡 Medio (B2B)</td></tr>
+      </table>
+    </div>
+  </div>
+  <div class="callout-warn">
+    <strong>Amenaza dominante:</strong> nuevos entrantes (CAPEX bajo, copiable 6-12 meses).<br>
+    <strong>Estrategia obligada:</strong> construir <em>marca</em>, no solo producto.
+  </div>
+</section>
+
+<!-- SLIDE 7 — BLOQUEADOR + FISCALIDAD -->
+<section class="slide">
+  <h2>🚨 Bloqueador regulatorio + fiscalidad</h2>
+  <div class="callout-warn">
+    <strong>Hallazgo crítico:</strong> El Ayuntamiento del Distrito Nacional <strong>NO emite permisos para food trucks ni vendedores móviles</strong> desde hace años. Reglamento 9/2012 en revisión.
+  </div>
+  <p><strong>Consecuencia directa:</strong> NO puedes operar legalmente en calle / Malecón / Zona Colonial / parques. Solo mall, evento, feria o canal privado.</p>
+  <div class="grid-2">
+    <div>
+      <h3>Trámites legales</h3>
+      <table class="compact">
+        <tr><th>Trámite</th><th>Tiempo</th></tr>
+        <tr><td>DIGEMAPS Registro Sanitario</td><td><strong>60-90 días — día 1</strong></td></tr>
+        <tr><td>RNC + Cámara Comercio</td><td>1-2 sem</td></tr>
+        <tr><td>ONAPI marca</td><td>4-8 meses</td></tr>
+        <tr><td>Carné manipulador</td><td>2-3 sem</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Fiscalidad RD</h3>
+      <table class="compact">
+        <tr><th>Concepto</th><th>Aplica</th></tr>
+        <tr><td><strong>ITBIS 18%</strong></td><td>✅ Sí — DOP 350 incluye DOP 53</td></tr>
+        <tr><td>ISC</td><td>❌ No (no aplica popcorn)</td></tr>
+        <tr><td><strong>RST</strong> ⭐</td><td>✅ Hasta RD$10.74M/año</td></tr>
+      </table>
+      <p style="margin-top:0.6em;font-size:0.9em;"><strong>Acción:</strong> registrarse en <strong>RST desde día 1</strong> — ahorra contador mensual.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8 — MODELO B2C + B2B -->
+<section class="slide">
+  <h2>Modelo: B2C + B2B paralelo</h2>
+  <h3>Ranking de canales B2C</h3>
+  <table class="compact">
+    <tr><th>#</th><th>Canal</th><th>Por qué</th></tr>
+    <tr><td>🏆 1</td><td><strong>Ferias gastronómicas</strong> (Bocao, Agroalimentaria)</td><td>Sin comisión Bocao, validación rápida</td></tr>
+    <tr><td>🎯 2</td><td><strong>Eventos privados</strong> (bodas, graduaciones)</td><td>Ticket alto, paga upfront</td></tr>
+    <tr><td>🏬 3</td><td><strong>Kiosko mall</strong> (Ágora → Sambil/Blue Mall)</td><td>Tráfico continuo</td></tr>
+    <tr><td>📱 4</td><td>Delivery + apps (IG, PedidosYa, Uber Eats)</td><td>Cobertura permanente</td></tr>
+    <tr><td>❌</td><td>Calle / Malecón</td><td><strong>NO PERMITIDO</strong></td></tr>
+  </table>
+  <h3>Canal B2B paralelo — palanca de margen alto</h3>
+  <table class="compact">
+    <tr><th>B2B</th><th>Ticket</th><th>Frecuencia</th><th>Margen</th><th>Activar</th></tr>
+    <tr><td><strong>Catering wedding</strong></td><td>DOP 50-150K/evento</td><td>2-6/mes</td><td>50-60%</td><td><strong>Mes 2</strong></td></tr>
+    <tr><td>Marca blanca hoteles</td><td>DOP 30-80K/mes</td><td>Mensual</td><td>40-50%</td><td>Mes 6+</td></tr>
+    <tr><td>"Popcorn Friday" oficinas</td><td>DOP 10-25K/sem</td><td>Semanal</td><td>55-65%</td><td>Mes 6+</td></tr>
+  </table>
+  <pre>P&L UNITARIO — Cubeta mediana DOP 350
+PVP                  DOP 350.00
+ITBIS incluido (18%) DOP  53.39
+Ingreso neto         DOP 296.61
+COGS (32% PVP)       DOP 112.00  ← insumos + empaque
+─────────────────────────────────
+Margen bruto         DOP 184.61  (≈68% sobre neto)</pre>
+</section>
+
+<!-- SLIDE 9 — INVERSIÓN + CAPACIDAD -->
+<section class="slide">
+  <h2>Inversión + techo de capacidad</h2>
+  <div class="grid-2">
+    <div style="background:#E8F5E9;border-color:#3A9D3A;">
+      <h3 style="color:#3A9D3A;">MVP — DOP 205,000 (USD 3,475)</h3>
+      <ul style="margin-left:1.2em;font-size:0.95em;">
+        <li>Máquina 8oz usada o Vevor nuevo</li>
+        <li>Pre-cocción caramelo manual</li>
+        <li>Carpa 3×3 + mesa</li>
+        <li>Inventario 30 días</li>
+        <li>Marketing lanzamiento DOP 10K</li>
+        <li>Capital trabajo 1 mes</li>
+      </ul>
+      <p><strong>Break-even base:</strong> Mes 7</p>
+      <p><strong>Riesgo si falla:</strong> pérdida acotada</p>
+    </div>
+    <div style="background:#FFF3E0;border-color:#D08F30;">
+      <h3 style="color:#D08F30;">Semi-pro — DOP 732,000 (USD 12,407)</h3>
+      <ul style="margin-left:1.2em;font-size:0.95em;">
+        <li>Máquina 12oz comercial nueva</li>
+        <li>Caramelizer dedicado</li>
+        <li>Módulo branded profesional</li>
+        <li>Inventario 60 días</li>
+        <li>Marketing DOP 60K</li>
+        <li>Capital trabajo 2 meses</li>
+      </ul>
+      <p><strong>Break-even base:</strong> Mes 20</p>
+      <p><strong>Riesgo si falla:</strong> pérdida significativa</p>
+    </div>
+  </div>
+  <h3>Techo físico de capacidad</h3>
+  <ul style="font-size:0.95em;">
+    <li>Máquina 8oz: 700-900 tazas/hora teórico → <strong>60-80 cubetas reales/hora</strong> con 1 operador</li>
+    <li>Día operativo: <strong>30-60 u/día kiosko regular · 150-200 u/día evento alto</strong></li>
+    <li>La máquina NO es el cuello de botella — <strong>el tráfico sí</strong></li>
+  </ul>
+</section>
+
+<!-- SLIDE 10 — BREAK-EVEN -->
+<section class="slide">
+  <h2>Break-even y proyección 12 meses</h2>
+  <h3>Curva de adopción MVP (escenario base)</h3>
+  <table class="compact">
+    <tr><th>Mes</th><th>Unidades</th><th>Ingresos DOP</th><th>Utilidad neta</th><th>Acumulado vs CAPEX</th></tr>
+    <tr><td>1</td><td>330</td><td>115,500</td><td style="color:#C8302E;">-26,460</td><td style="color:#C8302E;">-231,460</td></tr>
+    <tr><td>3</td><td>520</td><td>182,000</td><td style="color:#3A9D3A;">+18,760</td><td style="color:#C8302E;">-217,740</td></tr>
+    <tr><td>5</td><td>660</td><td>231,000</td><td style="color:#3A9D3A;">+52,080</td><td style="color:#C8302E;">-127,860</td></tr>
+    <tr style="background:#FFF3CD;font-weight:bold;"><td>7</td><td>720</td><td>252,000</td><td style="color:#3A9D3A;">+66,360</td><td style="color:#3A9D3A;">+100 ⬅ BREAK-EVEN</td></tr>
+    <tr><td>9</td><td>720</td><td>252,000</td><td style="color:#3A9D3A;">+66,360</td><td style="color:#3A9D3A;">+132,820</td></tr>
+    <tr><td>12</td><td>850</td><td>297,500</td><td style="color:#3A9D3A;">+92,300</td><td style="color:#3A9D3A;">+374,020</td></tr>
+  </table>
+  <h3>Unidades necesarias para recuperar inversión</h3>
+  <table class="compact">
+    <tr><th>Plazo</th><th>MVP</th><th>Semi-Pro</th></tr>
+    <tr><td>3 meses</td><td>~26 u/día (alto)</td><td>~93 u/día (irrealista)</td></tr>
+    <tr style="background:#FFF3CD;"><td><strong>6 meses</strong></td><td><strong>~13 u/día (realista)</strong></td><td>~47 u/día (agresivo)</td></tr>
+    <tr><td>12 meses</td><td>~7 u/día (seguro)</td><td>~23 u/día (alcanzable)</td></tr>
+  </table>
+  <div class="callout-ok">
+    <strong>Conclusión:</strong> MVP recupera con <strong>13 u/día sostenidas</strong> — meta a verificar en los primeros 90 días.
+  </div>
+</section>
+
+<!-- SLIDE 11 — RIESGOS -->
+<section class="slide">
+  <h2>Top 5 riesgos críticos</h2>
+  <table class="compact">
+    <tr><th>#</th><th>Riesgo</th><th>Prob</th><th>Impacto</th><th>Mitigación</th></tr>
+    <tr><td>1</td><td><strong>Sub-escala</strong> &lt;15 u/día</td><td>Media</td><td>Alto</td><td>Validar pre-CAPEX con 50 u piloto</td></tr>
+    <tr><td>2</td><td>Nuevo entrante copia</td><td>Alta (6-12m)</td><td>Medio</td><td>Marca y recurrencia, no solo producto</td></tr>
+    <tr><td>3</td><td><strong>Riesgo cambiario USD</strong></td><td>Media</td><td>Medio</td><td>Lotes 60-90 días; maíz local 50%</td></tr>
+    <tr><td>4</td><td><strong>Apagones</strong> EDESUR 17h/mes</td><td>Alta</td><td>Medio</td><td>Operar en malls con planta propia</td></tr>
+    <tr><td>5</td><td>Huracanes Q3</td><td>Alta</td><td>Medio</td><td>Plan B: delivery + B2B oficinas</td></tr>
+  </table>
+  <div class="grid-2">
+    <div>
+      <h3>Riesgo cambiario en números</h3>
+      <p style="font-size:0.92em;">Si DOP se deprecia <strong>10% vs USD</strong>:</p>
+      <ul style="font-size:0.9em;">
+        <li>COGS sube DOP 112 → DOP 124 (+10.7%)</li>
+        <li>Margen bruto cae de 68% → 64.6%</li>
+        <li>A 660 u/mes: <strong>−DOP 7,920/mes</strong></li>
+        <li>No crítico inmediato, pero erosiona</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Apagones — mitigación</h3>
+      <ul style="font-size:0.9em;">
+        <li>EDESUR Nov 2025: <strong>17.01 h/mes</strong> sin luz</li>
+        <li>Blackout nacional Nov 2025: 14 horas</li>
+        <li>Máquina 850W no opera sin luz (UPS no aguanta)</li>
+        <li><strong>Mejor mitigación gratis:</strong> malls grandes con planta</li>
+        <li>Opcional: planta portátil 2000W DOP 35-55K</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 12 — SWOT -->
+<section class="slide">
+  <h2>SWOT condensado</h2>
+  <div class="swot-grid">
+    <div class="swot-cell swot-s">
+      <h3>✅ Fortalezas</h3>
+      <ul>
+        <li>CAPEX MVP bajo (~USD 3.5K)</li>
+        <li>Margen bruto sano (68%)</li>
+        <li>Concepto diferenciador</li>
+        <li>Producto "instagrameable"</li>
+        <li>Flexibilidad pop-up</li>
+      </ul>
+    </div>
+    <div class="swot-cell swot-w">
+      <h3>⚠️ Debilidades</h3>
+      <ul>
+        <li>Sin experiencia en formato</li>
+        <li>Dependencia del fundador</li>
+        <li>Insumos críticos USD</li>
+        <li>Educación del consumidor</li>
+        <li>Sin marca registrada al inicio</li>
+      </ul>
+    </div>
+    <div class="swot-cell swot-o">
+      <h3>🎯 Oportunidades</h3>
+      <ul>
+        <li>Mercado snacks +8% CAGR</li>
+        <li>Vacío competitivo claro</li>
+        <li>E-commerce 51.8% penetración</li>
+        <li>Bocao sin comisión</li>
+        <li>Turismo USD 170/día</li>
+        <li>Eventos privados Q4 + Marzo</li>
+      </ul>
+    </div>
+    <div class="swot-cell swot-t">
+      <h3>🚨 Amenazas</h3>
+      <ul>
+        <li>ADN bloquea food trucks</li>
+        <li>Apagones EDESUR 17h/mes</li>
+        <li>Inflación alimentos</li>
+        <li>Cines pueden agregar caramelo</li>
+        <li>Nuevos entrantes copiables 6m</li>
+        <li>Huracanes Q3 al aire libre</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 13 — CALENDARIO -->
+<section class="slide">
+  <h2>Calendario operativo Q1–Q4</h2>
+  <table>
+    <tr><th>Trimestre</th><th>Intensidad</th><th>Eventos clave</th><th>Estrategia</th></tr>
+    <tr><td><strong>Q1 (Ene-Mar)</strong></td><td>🟢 Media-alta</td><td>Tres Reyes, Carnaval, Semana Santa, graduaciones colegio</td><td>Eventos privados + recuperar Q4</td></tr>
+    <tr><td><strong>Q2 (Abr-Jun)</strong></td><td>🟢 Alta</td><td>Día Madres, Día Padres, graduaciones universidad</td><td><strong>Pico de eventos B2B</strong></td></tr>
+    <tr style="background:#FFE0E0;"><td><strong>Q3 (Jul-Sep)</strong></td><td>🟡 Baja → muy baja</td><td>Verano (Jul alto), <strong>huracanes Sep</strong></td><td><strong>Plan B: delivery + oficinas</strong></td></tr>
+    <tr style="background:#E0F5E0;"><td><strong>Q4 (Oct-Dic)</strong></td><td>🔴 Pico</td><td>Bocao, viernes negro, Navidad, diáspora regresa</td><td>Mayor marketing + contratar refuerzo</td></tr>
+  </table>
+  <div class="callout">
+    <h3 style="margin-top:0;">Plan B para temporada de huracanes (Sep-Oct)</h3>
+    <ul>
+      <li>Stock insumos 60 días pre-temporada</li>
+      <li>Activar canal delivery + "Popcorn Friday" B2B oficinas (interior)</li>
+      <li>Eventos al aire libre: seguro de cancelación o contrato cubierto</li>
+      <li>Stories IG con disponibilidad durante eventos meteorológicos</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SLIDE 14 — KPIs -->
+<section class="slide">
+  <h2>KPIs y dashboard semanal</h2>
+  <h3>Métricas operativas (medir desde día 1)</h3>
+  <table>
+    <tr><th>KPI</th><th>Sem 1-4</th><th>Sem 5-12</th><th>Sem 13+</th></tr>
+    <tr><td>Unidades/día</td><td>≥10</td><td>≥20</td><td>≥30</td></tr>
+    <tr><td>Ticket promedio</td><td>DOP 280</td><td>DOP 320</td><td>DOP 350+</td></tr>
+    <tr><td>% cubeta mixta del total</td><td>≥30%</td><td>≥45%</td><td>≥55%</td></tr>
+    <tr><td>Conversión visitantes→ventas</td><td>≥5%</td><td>≥8%</td><td>≥10%</td></tr>
+    <tr><td>Tiempo de servicio</td><td>≤90s</td><td>≤75s</td><td>≤60s</td></tr>
+    <tr><td>Costo MP/cubeta</td><td>DOP 130</td><td>DOP 120</td><td>DOP 112</td></tr>
+  </table>
+  <div class="grid-2">
+    <div>
+      <h3>Comerciales (semanal)</h3>
+      <p>Ingresos brutos · Margen contributivo · CAC orgánico · % recurrentes · Seguidores IG netos · Engagement rate</p>
+    </div>
+    <div>
+      <h3>Financieras (mensual)</h3>
+      <p>EBITDA · Burn rate · Runway · Acumulado vs CAPEX</p>
+    </div>
+  </div>
+  <div class="callout">
+    <strong>Herramienta sugerida:</strong> Google Sheet con 3 pestañas (Daily Log · Weekly Summary · Monthly P&L). No necesitas ERP el primer año.
+  </div>
+</section>
+
+<!-- SLIDE 15 — DECISION GATES -->
+<section class="slide">
+  <h2>Decision gates</h2>
+  <div class="checklist">
+    <h3>Gate 1 — Día 30 (después del piloto pre-CAPEX)</h3>
+    <p><strong>Continúas si cumples ≥3 de 4:</strong></p>
+    <ul>
+      <li>Lote piloto vendió ≥80%</li>
+      <li>≥30% de compradores eligió cubeta mixta</li>
+      <li>≥1 wedding planner aceptó muestra y dejó referencia</li>
+      <li>IG llegó a 500+ seguidores orgánicos en 30 días</li>
+    </ul>
+    <p style="color:#C8302E;font-size:0.92em;">⚠️ Solo 2 de 4: pivot a envasado o solo B2B · 🛑 &lt;2: <strong>NO-GO</strong>, archivar</p>
+  </div>
+  <div class="checklist">
+    <h3>Gate 2 — Día 90 (post-MVP)</h3>
+    <p><strong>Escalas a mall fijo si cumples ≥3 de 4:</strong></p>
+    <ul>
+      <li>Promedio ≥20 u/día en últimos 30 días</li>
+      <li>Margen bruto efectivo ≥60%</li>
+      <li>EBITDA mensual ≥0</li>
+      <li>Mall mediano acepta cotización ≤RD$50K/mes</li>
+    </ul>
+  </div>
+  <div class="checklist">
+    <h3>Gate 3 — Día 180 (decisión semi-pro)</h3>
+    <p><strong>Inviertes CAPEX semi-pro (DOP 732K) solo si:</strong></p>
+    <ul>
+      <li>≥30 u/día sostenido últimos 60 días</li>
+      <li>≥8 eventos B2B cerrados</li>
+      <li>EBITDA mensual ≥ DOP 50K</li>
+      <li>Hay demanda no atendida que lo justifica</li>
+    </ul>
+  </div>
+  <div class="checklist" style="border-color:#C8302E;background:#FFF5F5;">
+    <h3 style="color:#C8302E;">Gate 4 — Día 270 (señal de pivot/cierre)</h3>
+    <p><strong>🛑 Reconsidera todo si:</strong></p>
+    <ul>
+      <li>Pierdes dinero 3 meses consecutivos</li>
+      <li>Apareció competidor directo con producto similar a precio menor</li>
+      <li>No has alcanzado 25 u/día promedio en último mes</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SLIDE 16 — PLAN 90 DÍAS -->
+<section class="slide">
+  <h2>Plan de 90 días</h2>
+  <div class="grid-2">
+    <div>
+      <h3>Mes 1 — Cimientos legales y validación cero</h3>
+      <ul style="font-size:0.93em;">
+        <li><strong>Sem 1:</strong> Iniciar DIGEMAPS · RNC + RST · Cuentas IG/TikTok</li>
+        <li><strong>Sem 2:</strong> Lote piloto 50 cubetas, vender en 1 evento + 1 feria</li>
+        <li><strong>Sem 3:</strong> Llamar 4 malls + 2 wedding planners + Bocao</li>
+        <li><strong>Sem 4:</strong> 🚦 <strong>Decisión Gate 1</strong></li>
+      </ul>
+    </div>
+    <div>
+      <h3>Mes 2 — Compra equipo y primeros canales</h3>
+      <ul style="font-size:0.93em;">
+        <li><strong>Sem 5:</strong> Comprar CAPEX MVP completo</li>
+        <li><strong>Sem 6:</strong> 1ª feria pagada + 1 evento privado pagado</li>
+        <li><strong>Sem 7:</strong> Iniciar pauta IG/TikTok</li>
+        <li><strong>Sem 8:</strong> Cerrar 2-3 eventos B2B; conversación con 1 mall</li>
+      </ul>
+    </div>
+  </div>
+  <div style="background:white;padding:1em 1.2em;border-radius:0.5em;border:1px solid #E0D5C5;margin-top:1em;">
+    <h3>Mes 3 — Velocidad y validación</h3>
+    <ul style="font-size:0.93em;">
+      <li><strong>Sem 9:</strong> Operar 4-5 días/semana entre eventos + kiosko temporal si mall acepta</li>
+      <li><strong>Sem 10:</strong> Medir conversión, ticket, % mixto vs single — ajustar precio</li>
+      <li><strong>Sem 11:</strong> Activar 1 wedding planner como cliente recurrente B2B</li>
+      <li><strong>Sem 12:</strong> 🚦 <strong>Decisión Gate 2</strong> — escalar a kiosko fijo o quedarse en eventos</li>
+    </ul>
+  </div>
+</section>
+
+<!-- SLIDE 17 — EMPAQUE -->
+<section class="slide">
+  <h2>Diferenciador opcional: empaque biodegradable</h2>
+  <div class="grid-2">
+    <div>
+      <h3>El argumento</h3>
+      <ul>
+        <li><strong>Proveedores RD existen:</strong> We Supply Dominicana, ProEmpaques Nacionales</li>
+        <li><strong>Costo incremental:</strong> +DOP 8-15 por cubeta</li>
+        <li><strong>Impacto a 660 u/mes:</strong> +DOP 5,280-9,900</li>
+        <li><strong>Beneficio:</strong> diferenciador único vs cines + apela a María (consumidora consciente) + narrativa social</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Recomendación por fase</h3>
+      <table class="compact">
+        <tr><th>Fase</th><th>Decisión</th></tr>
+        <tr><td>MVP (mes 1-3)</td><td>❌ No incluir</td></tr>
+        <tr><td>Mes 4-6</td><td>⚠️ Upgrade pagado +DOP 20</td></tr>
+        <tr><td>Mes 7+</td><td>✅ Estándar de marca</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 18 — LA PREGUNTA FINAL -->
+<section class="slide">
+  <h2>La pregunta final</h2>
+  <p style="font-size:1.15em;margin-bottom:1em;">Antes de gastar el primer peso, respóndete con honestidad:</p>
+  <div class="q-list">
+    <ol>
+      <li>
+        <strong>¿Puedo dedicarle 4-5 días por semana en los primeros 90 días?</strong>
+        <em>Sin esto, ni el MVP funciona — necesitas estar en el sitio.</em>
+      </li>
+      <li>
+        <strong>¿Tengo USD 3,500 que pueda perder sin afectar mi estabilidad financiera?</strong>
+        <em>El MVP puede fallar. Si esa pérdida te quiebra, no entres.</em>
+      </li>
+      <li>
+        <strong>¿Tengo paciencia para 7 meses sin retorno?</strong>
+        <em>El break-even base es mes 7. Antes de eso, estás en rojo.</em>
+      </li>
+      <li>
+        <strong>¿Conozco a 2-3 wedding planners u organizadores de eventos en RD?</strong>
+        <em>Si no, el canal B2B (margen alto) no se activa fácil.</em>
+      </li>
+      <li>
+        <strong>¿Me emociona vender popcorn, o solo me emociona la idea de "tener un negocio"?</strong>
+        <em>Lo segundo se apaga en 60 días. Lo primero te sostiene en mes 9.</em>
+      </li>
+    </ol>
+  </div>
+  <div class="big-decision bd-go">Si las 5 respuestas son SÍ → <strong>GO MVP</strong>, empezar Mes 1 esta semana</div>
+  <div class="big-decision bd-review">Si tienes 1 NO → revisar qué falta antes de invertir</div>
+  <div class="big-decision bd-nogo">Si tienes ≥2 NO → <strong>NO-GO por ahora</strong>, archivar idea con honestidad</div>
+</section>
+
+<!-- NAVEGACIÓN -->
+<div class="counter" id="counter">1 / 18</div>
+<div class="nav-hint">← → flechas · ESC vista general · F pantalla completa · P imprimir/PDF</div>
+
+<!-- VISTA GENERAL (overview) -->
+<div class="overview" id="overview">
+  <h2 style="color:#F4C430;margin-bottom:1em;">Vista general — clic en una slide para ir</h2>
+  <div class="overview-grid" id="overview-grid"></div>
+</div>
+
+<script>
+const slides = document.querySelectorAll('.slide');
+const total = slides.length;
+const titles = [
+  "Portada",
+  "Decisión en 30 segundos",
+  "La oportunidad",
+  "Solución + marca",
+  "Mercado y buyer personas",
+  "Competencia + Porter",
+  "Bloqueador + fiscalidad",
+  "Modelo B2C + B2B",
+  "Inversión + capacidad",
+  "Break-even 12 meses",
+  "Top 5 riesgos",
+  "SWOT",
+  "Calendario Q1-Q4",
+  "KPIs y dashboard",
+  "Decision gates",
+  "Plan 90 días",
+  "Empaque biodegradable",
+  "La pregunta final"
+];
+let current = 0;
+
+function show(i) {
+  i = Math.max(0, Math.min(total - 1, i));
+  slides[current].classList.remove('active');
+  current = i;
+  slides[current].classList.add('active');
+  slides[current].scrollTop = 0;
+  document.getElementById('counter').textContent = `${current + 1} / ${total}`;
+  document.getElementById('progress').style.width = `${((current + 1) / total) * 100}%`;
+  history.replaceState(null, '', `#${current + 1}`);
+}
+
+function toggleOverview() {
+  const ov = document.getElementById('overview');
+  ov.classList.toggle('active');
+}
+
+function buildOverview() {
+  const grid = document.getElementById('overview-grid');
+  for (let i = 0; i < total; i++) {
+    const card = document.createElement('div');
+    card.className = 'overview-card';
+    card.innerHTML = `<div class="num">Slide ${i + 1}</div><div class="title">${titles[i]}</div>`;
+    card.addEventListener('click', () => {
+      show(i);
+      document.getElementById('overview').classList.remove('active');
+    });
+    grid.appendChild(card);
+  }
+}
+
+document.addEventListener('keydown', e => {
+  const ov = document.getElementById('overview');
+  if (e.key === 'Escape') {
+    ov.classList.toggle('active');
+    return;
+  }
+  if (ov.classList.contains('active')) return;
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown' || e.key === 'j') show(current + 1);
+  else if (e.key === 'ArrowLeft' || e.key === 'PageUp' || e.key === 'k') show(current - 1);
+  else if (e.key === 'Home') show(0);
+  else if (e.key === 'End') show(total - 1);
+  else if (e.key === 'f' || e.key === 'F') {
+    if (!document.fullscreenElement) document.documentElement.requestFullscreen();
+    else document.exitFullscreen();
+  } else if (e.key === 'p' || e.key === 'P') {
+    window.print();
+  }
+});
+
+// Click derecho/izquierdo en pantalla para navegar
+document.addEventListener('click', e => {
+  if (e.target.closest('.overview') || e.target.closest('.overview-card')) return;
+  if (document.getElementById('overview').classList.contains('active')) return;
+  // No navega con clic — solo teclado, para no interferir con selección de texto
+});
+
+// Touch swipe para móvil
+let touchX = null;
+document.addEventListener('touchstart', e => { touchX = e.changedTouches[0].clientX; });
+document.addEventListener('touchend', e => {
+  if (touchX === null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 50) show(current + (dx < 0 ? 1 : -1));
+  touchX = null;
+});
+
+// Iniciar
+buildOverview();
+if (location.hash) {
+  const n = parseInt(location.hash.slice(1), 10);
+  if (!isNaN(n)) show(n - 1);
+}
+</script>
+
+</body>
+</html>

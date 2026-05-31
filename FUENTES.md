@@ -166,3 +166,97 @@
 - Comisión real PedidosYa / Uber Eats RD (variable por negociación)
 - Volumen real de bodas/eventos privados RD por año (sin asociación que reporte)
 - Tarifa real Bocao Food Fest 2025/2026 expositor snack (contacto directo requerido)
+
+---
+
+## Apéndice iteración 3 — Guía de producción
+
+### Fundamentos técnicos del popcorn
+
+| Fuente | Dato extraído | Confianza |
+|---|---|---|
+| [Popcornopolis — Mushroom vs Butterfly](https://www.popcornopolis.com/mushroom-vs-butterfly-popcorn/) | Mushroom = redondo (coatings); Butterfly = irregular (mantequilla) | [V] |
+| [WebstaurantStore — Types of Popcorn](https://www.webstaurantstore.com/guide/517/types-of-popcorn-and-popcorn-machines.html) | Humedad ideal grano: 13-14.5%; temperatura popping 350-400°F | [V] |
+| [Preferred Popcorn — FAQ](https://www.preferredpopcorn.com/company/frequently-asked-questions) | Mushroom requiere temperatura levemente mayor por cáscara más gruesa | [V] |
+| [Become a Popcorn Genius — Ep 011](https://becomeapopcorngenius.com/episode/011-popcorn-kernels-101-mushroom-vs-butterfly-whats-the-difference) | Diferencias técnicas profundas mushroom vs butterfly para negocio | [V] |
+
+### Receta de mantequilla / Flavacol
+
+| Fuente | Dato extraído | Confianza |
+|---|---|---|
+| [Popcorn Genius — Flavacol Recipe](https://www.popcorngenius.com/popcorn/flavacol-popcorn-recipe) | Flavacol es la base del sabor cine; añadir durante popeo no después | [V] |
+| [Foodhow — How to Use Flavacol](https://foodhow.com/how-to-use-flavacol-make-movie-theater-popcorn-at-home/) | Ratio: ½ cdta Flavacol / 4oz granos (~16 cups popcorn) | [V] |
+| [Gerharz Restaurant Equipment — Movie Theater Popcorn](https://gerharzrestaurantequipment.com/blog/how-to-make-movie-theater-popcorn-at-home-or-in-your-stand-the-butter-secret/) | Aplicar mantequilla en 2 fases para cobertura uniforme | [V] [Px USA] |
+
+### Receta de caramelo / temperaturas
+
+| Fuente | Dato extraído | Confianza |
+|---|---|---|
+| [ThermoWorks — Caramel Popcorn Temperatures](https://blog.thermoworks.com/caramel-popcorn/) | Target caramelo popcorn: 135-140°C (275-285°F) | [V] |
+| [Hill Country Chocolate — Baking Soda Role](https://www.hillcountrychocolate.com/blogs/recipe-ideas/why-add-baking-soda-to-caramel-popcorn) | Bicarbonato produce CO2 que airea caramelo, facilita cobertura | [V] |
+| [Hill Country Chocolate — Soggy Caramel Popcorn](https://www.hillcountrychocolate.com/blogs/recipe-ideas/why-is-my-homemade-caramel-popcorn-soggy) | Causa principal de caramelo pegajoso: humedad y temperatura baja | [V] |
+| [RecipeTin Eats — Caramel Popcorn](https://www.recipetineats.com/salted-caramel-popcorn/) | Horneado 45 min a 250°F clave para crujiente duradero | [V] |
+| [FoodCrumbles — Science of Caramel Popcorn](https://foodcrumbles.com/the-science-of-caramel-popcorn/) | Jarabe de maíz inhibe cristalización del azúcar | [V] |
+| [Bake With Shivesh — Stages of Sugar](https://bakewithshivesh.com/stages-of-sugar/) | Etapas del azúcar: soft ball, firm ball, hard crack, etc. | [V] |
+| [You Make Candy — Hard Crack Stage](https://youmakecandy.com/what-temperature-is-the-hard-crack-stage-for-candy/) | Test agua fría como sustituto de termómetro | [V] |
+
+### Aceites y kettle
+
+| Fuente | Dato extraído | Confianza |
+|---|---|---|
+| [Popsmith — Best Oil for Popcorn](https://popsmith.com/blogs/kernels-of-truth/best-oil-for-popcorn) | Aceite de coco refinado = preferido producción comercial | [V] |
+| [Great Northern Popcorn — FAQ](https://www.greatnorthernpopcorn.com/pages/faq) | Ratio 3:1 maíz:aceite; ghee/clarificada para finishing | [V] |
+
+### Máquinas comerciales (2026)
+
+| Fuente | Dato extraído | Confianza |
+|---|---|---|
+| [ThirstyBear — Best Commercial Popcorn Machines 2026](https://www.thirstybear.com/best-commercial-popcorn-machines/) | Great Northern Matinee 8oz top recomendación pequeño-mediano | [V] [Px USA] |
+| [VEVOR 8oz Popcorn Machine](https://www.vevor.com/popcorn-poppers-c_12010/vevor-popcorn-popper-machine-8-oz-countertop-popcorn-maker-850w-48-cups-red-p_010541695855) | 850W, 48 cups/batch, USD ~150-180 | [V] |
+| [Paragon Theater Pop 8oz](https://www.amazon.com/Paragon-Professional-Concessionaires-Requiring-Commercial/dp/B000TGGCYI) | Hecho USA, durable, ~USD 300 | [V] [Px USA] |
+| [Golden Ribbon Popcorn](https://www.goldenribbon.co/) | Proveedor LATAM de mushroom/butterfly desde Argentina (exporta a RD) | [V] |
+
+---
+
+## Apéndice iteración 4 — Modelo de negocio
+
+### Franquicias popcorn (benchmark)
+
+| Fuente | Dato extraído | Confianza |
+|---|---|---|
+| [Doc Popcorn Franchise — FranchiseDirect](https://www.franchisedirect.com/foodfranchises/doc-popcorn-franchise-07331/ufoc/) | Inversión total USD 175K-414K, franchise fee USD 15K | [V] [Px USA] |
+| [Doc Popcorn FDD 2025 — Sharpsheets](https://sharpsheets.io/blog/doc-popcorn-franchise-fdd-profits-costs/) | Royalty 6% gross + advertising 1% | [V] [Px USA] |
+| [Doc Popcorn Low-Cost Franchise](https://docpopcorn.com/blog/doc-popcorn-a-lowcost-franchise-opportunity/) | Modelos: Mobile PopCart, PopKiosk en mall, PopShop | [V] [Px USA] |
+| [Doc Popcorn — FranchiseHelp](https://www.franchisehelp.com/franchises/doc-popcorn/) | 100+ locations en USA, México, Puerto Rico, Japón | [V] [Px USA] |
+
+### Delivery apps LATAM (comisiones)
+
+| Fuente | Dato extraído | Confianza |
+|---|---|---|
+| [Rappi Fees and Commissions 2025 — Menuviel](https://blog.menuviel.com/rappi-fees-and-commissions-for-restaurants/) | Rappi 20-25% comisión típica; 10-30% rango total | [V] [Px LATAM] |
+| [Contxto — Rappi Restaurants](https://contxto.com/en/colombia/rappi-commissions-restaurants/) | Negociación posible; reembolso 20% en algunos casos | [V] [Px Colombia] |
+| [Sensor Tower — DR Food Delivery Q1 2025](https://sensortower.com/blog/2025-q1-unified-top-5-food%20delivery%20services-units-do-63da96fbe1714cfff1c1e5a1) | PedidosYa lidera RD; 13K-21K descargas semanales | [V] |
+
+### Marca empacada gourmet (benchmark)
+
+| Fuente | Dato extraído | Confianza |
+|---|---|---|
+| [Futuredatastats — Gourmet Popcorn Market](https://www.futuredatastats.com/gourmet-popcorn-market) | Supermercados dominan 79.05% market share retail popcorn | [V] [Px Global] |
+| [Garrett Popcorn](https://www.garrettpopcorn.com/) | Líder USA gourmet popcorn, modelo retail + locations | [V] [Px USA] |
+| [GlobalGrowthInsights — Top Popcorn Companies 2025](https://www.globalgrowthinsights.com/blog/popcorn-companies-598) | Garrett USD 87.4M revenue 2023, 414 empleados | [V] [Px USA] |
+| [Gold Medal — 4 Profitable Popcorn Business Models](https://www.gmpopcorn.com/resources/how-tos/4-profitable-gourmet-popcorn-shop-business-models) | Modelos: shop, kiosk, mobile, online | [V] [Px USA] |
+
+### B2B catering / food entrepreneurship
+
+| Fuente | Dato extraído | Confianza |
+|---|---|---|
+| [Paytronix — Catering Business Ideas](https://www.paytronix.com/blog/catering-business-ideas) | Corporate catering tiene AOV alto y demanda predecible | [V] [Px USA] |
+| [CloudKitchens — Catering Marketing](https://cloudkitchens.com/blog/smart-catering-marketing-ideas-for-commercial-kitchen-success-fueling-growth-in-the-digital-age) | B2B genera MRR estable vs B2C transaccional | [V] [Px USA] |
+| [PrometAI — Catering Case Studies](https://prometai.app/case-studies/catering-case-study-examples) | Caso GourmetEdge: 28→46 contratos B2B = USD 185K MRR | [V] [Px USA] |
+
+### Nuevos gaps reconocidos (iteración 4)
+- Renta exacta kiosko temporal en malls RD (Sambil, Galería 360) — requiere
+  contacto directo con leasing department
+- Comisión PedidosYa RD específica (no publicada — varía por negociación)
+- Casos de franquicia popcorn en LATAM con datos públicos (Doc Popcorn presente
+  pero datos solo USA disponibles)
